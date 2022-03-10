@@ -29,6 +29,7 @@ export type BifrostWalletId = string | "nami" | "ccvault" | "flint";
 export class Bifrost {
   static _cardano = (window as any).cardano;
   static _api?: BifrostWalletApi = undefined;
+  static _currentWalletId: string | undefined = undefined;
 
   public static getWallets(): BifrostWalletMetadata[] {
     const result: BifrostWalletMetadata[] = [];
@@ -52,6 +53,7 @@ export class Bifrost {
       const result = await Bifrost._cardano[id].enable();
       if (typeof result === "boolean") Bifrost._api = Bifrost._cardano;
       else Bifrost._api = result;
+      Bifrost._currentWalletId = id;
       return true;
     } catch (ex) {
       console.log(ex);
@@ -66,6 +68,7 @@ export class Bifrost {
   public static async setWalletAsync(id: BifrostWalletId) {
     if (await this.isEnabledAsync(id)) {
       await Bifrost.enableAsync(id);
+      Bifrost._currentWalletId = id;
     } else Bifrost._throwNoAPIError();
   }
 
@@ -120,12 +123,12 @@ export class Bifrost {
       Bifrost._throwNoAPIError();
   }
 
-  public static async signDataRawAsync(rewardAddrCborHex: string, message: string, walletId: BifrostWalletId) {
+  public static async signDataRawAsync(addressCborHex: string, message: string) {
     if (Bifrost._api !== undefined) {
-      if (walletId === "nami")
-        return await Bifrost._cardano.signData(rewardAddrCborHex, message);
+      if (Bifrost._currentWalletId === "nami")
+        return await Bifrost._cardano.signData(addressCborHex, message);
       else
-        return await Bifrost._api.signData(rewardAddrCborHex, message);
+        return await Bifrost._api.signData(addressCborHex, message);
     }
     else
       Bifrost._throwNoAPIError();

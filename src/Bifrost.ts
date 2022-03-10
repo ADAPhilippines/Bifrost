@@ -69,35 +69,35 @@ export class Bifrost {
     } else Bifrost._throwNoAPIError();
   }
 
-  public static async signTxRawAsync(txCborHex: string, isPartialSign?: boolean): Promise<string> {
+  public static async signTxRawAsync(txCborHex: string, isPartialSign?: boolean): Promise<string | undefined> {
     if (Bifrost._api !== undefined)
       return await Bifrost._api.signTx(txCborHex, isPartialSign);
     else
       Bifrost._throwNoAPIError();
   }
 
-  public static async submitTxRawAsync(txCborHex: string): Promise<string> {
+  public static async submitTxRawAsync(txCborHex: string): Promise<string | undefined> {
     if (Bifrost._api !== undefined)
       return await Bifrost._api.submitTx(txCborHex);
     else
       Bifrost._throwNoAPIError();
   }
 
-  public static async getUsedAddressesRawAsync(): Promise<string[]> {
+  public static async getUsedAddressesRawAsync(): Promise<string[] | undefined> {
     if (Bifrost._api !== undefined)
       return await Bifrost._api.getUsedAddresses();
     else
       Bifrost._throwNoAPIError();
   }
 
-  public static async getUtxosRawAsync(valueCborHex?: string): Promise<string[]> {
+  public static async getUtxosRawAsync(valueCborHex?: string): Promise<string[] | undefined> {
     if (Bifrost._api !== undefined)
       return await Bifrost._api.getUtxos(valueCborHex);
     else
       Bifrost._throwNoAPIError();
   }
 
-  public static async getCollateralRawAsync(): Promise<string[]> {
+  public static async getCollateralRawAsync(): Promise<string[] | undefined> {
     if (Bifrost._api !== undefined)
       return Bifrost._api.getCollateral ? Bifrost._api.getCollateral() : await Bifrost._api.experimental.getCollateral();
     else

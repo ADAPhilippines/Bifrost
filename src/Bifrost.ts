@@ -59,8 +59,8 @@ export class Bifrost {
     }
   }
 
-  public static async isEnabledAsync(id: BifrostWalletId) {
-    return await id === "nami" ? Bifrost._cardano.isEnabled() : Bifrost._cardano[id].isEnabled();
+  public static async isEnabledAsync(id: BifrostWalletId): Promise<boolean> {
+    return await Bifrost._cardano[id].isEnabled();
   }
 
   public static async setWalletAsync(id: BifrostWalletId) {

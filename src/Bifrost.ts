@@ -27,7 +27,7 @@ export type BifrostWalletApi = {
 export type BifrostWalletId = string | "nami" | "ccvault" | "flint";
 
 export class Bifrost {
-  static _cardano = (window as any).cardano;
+  static _cardano = () => (window as any).cardano;
   static _api?: BifrostWalletApi = undefined;
   static _currentWalletId: string | undefined = undefined;
 
@@ -35,7 +35,7 @@ export class Bifrost {
     const result: BifrostWalletMetadata[] = [];
     for (const i in Bifrost._cardano) {
       const cardano = Bifrost._cardano;
-      const p = cardano[i];
+      const p = cardano()[i];
       if (p.apiVersion !== null && p.icon != null && p.name !== null) {
         result.push({
           apiVersion: p.apiVersion,
@@ -50,8 +50,8 @@ export class Bifrost {
 
   public static async enableAsync(id: BifrostWalletId): Promise<boolean> {
     try {
-      const result = await Bifrost._cardano[id].enable();
-      if (typeof result === "boolean") Bifrost._api = Bifrost._cardano;
+      const result = await Bifrost._cardano()[id].enable();
+      if (typeof result === "boolean") Bifrost._api = Bifrost._cardano();
       else Bifrost._api = result;
       Bifrost._currentWalletId = id;
       return true;
@@ -62,7 +62,7 @@ export class Bifrost {
   }
 
   public static async isEnabledAsync(id: BifrostWalletId): Promise<boolean> {
-    return await Bifrost._cardano[id].isEnabled();
+    return await Bifrost._cardano()[id].isEnabled();
   }
 
   public static async setWalletAsync(id: BifrostWalletId) {
@@ -126,7 +126,7 @@ export class Bifrost {
   public static async signDataRawAsync(addressCborHex: string, message: string) {
     if (Bifrost._api !== undefined) {
       if (Bifrost._currentWalletId === "nami")
-        return await Bifrost._cardano.signData(addressCborHex, message);
+        return await Bifrost._cardano().signData(addressCborHex, message);
       else
         return await Bifrost._api.signData(addressCborHex, message);
     }

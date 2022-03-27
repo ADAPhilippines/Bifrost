@@ -1,6 +1,6 @@
 {
   "name": "@saib/cardano-bifrost",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A Cardano CIP30 Wallet API Library",
   "main": "dist/Bifrost.js",
   "scripts": {

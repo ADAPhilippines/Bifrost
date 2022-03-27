@@ -33,8 +33,8 @@ export class Bifrost {
 
   public static getWallets(): BifrostWalletMetadata[] {
     const result: BifrostWalletMetadata[] = [];
-    for (const i in Bifrost._cardano) {
-      const cardano = Bifrost._cardano;
+    const cardano = Bifrost._cardano;
+    for (const i in cardano()) {
       const p = cardano()[i];
       if (p.apiVersion !== null && p.icon != null && p.name !== null) {
         result.push({
